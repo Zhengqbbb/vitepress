@@ -1,28 +1,42 @@
 ---
 layout: home
+sidebar: false
 
-title: VitePress
-titleTemplate: Vite & Vue Powered Static Site Generator
+title: cz-git
+titleTemplate: More engineered, lightweight, customizable, standard output format commitizen adapter
 
 hero:
-  name: VitePress
-  text: Vite & Vue Powered Static Site Generator
-  tagline: Simple, powerful, and performant. Meet the modern SSG framework you've always wanted.
+  name: cz-git
+  text: ""
+  tagline: More engineered, lightweight, customizable, standard output format commitizen adapter and CLI.
+  image:
+    src: https://user-images.githubusercontent.com/40693636/154064210-964aeaa0-d9dc-4cea-9e52-2ffc3789611b.png
+    alt: cz-git
   actions:
     - theme: brand
-      text: Get Started
-      link: /guide/getting-started
+      text: Get Started →
+      link: /guide/
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/vuejs/vitepress
+      text:  Introduction
+      link: /guide/introduction
+    - theme: alt
+      text: Why cz-git?
+      link: /guide/why
+    - theme: alt
+      text: CLI
+      link: /cli/
 
-features:
-  - title: "Vite: The DX that can't be beat"
-    details: Feel the speed of Vite. Instant server start and lightning fast HMR that stays fast regardless of the app size.
-  - title: Designed to be simplicity first
-    details: With Markdown-centered content, it's built to help you focus on writing and deployed with minimum configuration.
-  - title: Power of Vue meets Markdown
-    details: Enhance your content with all the features of Vue in Markdown, while being able to customize your site with Vue.
-  - title: Fully static yet still dynamic
-    details: Go wild with true SSG + SPA architecture. Static on page load, but engage users with 100% interactivity from there.
+czFeatures:
+  - title: Friendly First
+    details: Friendly command line tool, Supports search and selection on the command line, reducing spelling errors.To be a lazyman.
+  - title: Highly Customizable
+    details: Enjoy the customization process to make the tool more in line with your or team habits.
+  - title: Engineering Support
+    details: Reduce repetitive typing. Better for engineering repo(e.g:monorepo) or business system. Easy link with issue.
+  - title: With Commitlint
+    details: Dynamically get commitlint configuration and give command line prompts.
+pkgFeatureTitle: Lightweight
+emojiFeature:
+  title: Emoji Support
+  details: Support emoji in commit message.
 ---
