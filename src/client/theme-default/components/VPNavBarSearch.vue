@@ -5,15 +5,19 @@ import {
   defineAsyncComponent,
   onMounted,
   onUnmounted,
-  ref
+  ref,
+  watch
 } from 'vue'
-import { useData } from '../composables/data.js'
+import { useData, inBrowser } from 'vitepress'
+
+// import { useData } from '../composables/data.js'
 
 const VPAlgoliaSearchBox = __ALGOLIA__
   ? defineAsyncComponent(() => import('./VPAlgoliaSearchBox.vue'))
   : () => null
 
 const { theme, localeIndex } = useData()
+const locale = computed(() => localeIndex.value)
 
 // to avoid loading the docsearch js upfront (which is more than 1/3 of the
 // payload), we delay initializing it until the user has actually clicked or
@@ -29,9 +33,13 @@ const buttonText = computed(
     'Search'
 )
 
-onMounted(() => {
+onMounted(async () => {
   if (!theme.value.algolia) {
     return
+  }
+  if (inBrowser) {
+    //@ts-ignore
+    await import ('../composables/getAllEvent.js')
   }
 
   // meta key detect (same logic as in @docsearch/js)
@@ -52,7 +60,14 @@ onMounted(() => {
   }
 
   window.addEventListener('keydown', handleSearchHotKey)
-
+  watch(
+    () => locale.value,
+    () => {
+      // handleSearchHotKey #docsearch keydown 
+      loaded.value = false
+      remove()
+    }
+  )
   onUnmounted(remove)
 })
 

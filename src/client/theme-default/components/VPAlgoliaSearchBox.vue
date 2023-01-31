@@ -83,6 +83,14 @@ function initialize(userOptions: DefaultTheme.AlgoliaSearchOptions) {
   })
 
   docsearch$(options)
+
+  const keyboardEvent = window
+    // @ts-ignore
+    ?.getEventListeners()
+    ?.keydown
+    ?.[0]
+    ?.listener
+  window.removeEventListener('keydown', keyboardEvent)
 }
 
 function getRelativePath(absoluteUrl: string) {

@@ -114,7 +114,7 @@ export async function createVitePressPlugin(
           alias: resolveAliases(siteConfig, ssr)
         },
         define: {
-          __ALGOLIA__: !!site.themeConfig.algolia,
+          __ALGOLIA__: true,
           __CARBON__: !!site.themeConfig.carbonAds
         },
         optimizeDeps: {

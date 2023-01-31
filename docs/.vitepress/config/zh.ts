@@ -19,7 +19,11 @@ export const zhConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       apiKey: 'bf9a47e8561e6b8ffdda0bf8595a2f5d',
       indexName: 'cz-git',
       placeholder: '搜索文档',
-      buttonText: '搜索文档',
+      translations: {
+        button: {
+          buttonText: '搜索文档'
+        }
+      },
       searchParameters: {
         facetFilters: ['lang:zh-CN'],
       },
