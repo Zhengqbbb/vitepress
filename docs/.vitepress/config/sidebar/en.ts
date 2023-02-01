@@ -4,7 +4,6 @@ export const en: DefaultTheme.Sidebar = {
   '/cli/': [
     {
       text: 'Guide',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -23,7 +22,6 @@ export const en: DefaultTheme.Sidebar = {
     },
     {
       text: 'Subcommands',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -46,7 +44,6 @@ export const en: DefaultTheme.Sidebar = {
     },
     {
       text: 'Options',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -67,19 +64,16 @@ export const en: DefaultTheme.Sidebar = {
   '/': [
     {
       text: 'Guide',
-      collapsible: true,
       collapsed: false,
       items: [
         {
           text: 'Introduction',
           link: '/guide/introduction',
-          collapsible: true,
           collapsed: true,
           items: [
             {
               text: 'Why cz-git',
               link: '/guide/why',
-              collapsible: true,
               collapsed: true,
               items: [
                 {
@@ -94,7 +88,6 @@ export const en: DefaultTheme.Sidebar = {
     },
     {
       text: 'Config',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -113,7 +106,6 @@ export const en: DefaultTheme.Sidebar = {
     },
     {
       text: 'Recipes',
-      collapsible: true,
       collapsed: false,
       items: [
         {

@@ -4,7 +4,6 @@ export const zh: DefaultTheme.Sidebar = {
   '/zh/cli/': [
     {
       text: '指南',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -23,7 +22,6 @@ export const zh: DefaultTheme.Sidebar = {
     },
     {
       text: '子命令',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -46,7 +44,6 @@ export const zh: DefaultTheme.Sidebar = {
     },
     {
       text: '选项',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -67,7 +64,6 @@ export const zh: DefaultTheme.Sidebar = {
   '/zh/': [
     {
       text: '指南',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -86,7 +82,6 @@ export const zh: DefaultTheme.Sidebar = {
     },
     {
       text: '配置',
-      collapsible: true,
       collapsed: false,
       items: [
         {
@@ -105,7 +100,6 @@ export const zh: DefaultTheme.Sidebar = {
     },
     {
       text: '窍门',
-      collapsible: true,
       collapsed: false,
       items: [
         {
