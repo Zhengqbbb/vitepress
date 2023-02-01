@@ -1,6 +1,6 @@
 {
   "name": "vitepress",
-  "version": "1.0.0-alpha.45",
+  "version": "1.0.0-alpha.45-1",
   "description": "Fork Vitepress",
   "type": "module",
   "packageManager": "pnpm@7.26.1",
