@@ -73,14 +73,22 @@ export const en: DefaultTheme.Sidebar = {
         {
           text: 'Introduction',
           link: '/guide/introduction',
-        },
-        {
-          text: 'Why cz-git',
-          link: '/guide/why',
-        },
-        {
-          text: 'Getting Started',
-          link: '/guide/',
+          collapsible: true,
+          collapsed: true,
+          items: [
+            {
+              text: 'Why cz-git',
+              link: '/guide/why',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                {
+                  text: 'Getting Started',
+                  link: '/guide/',
+                },
+              ]
+            },
+          ]
         },
       ],
     },
