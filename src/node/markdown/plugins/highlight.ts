@@ -11,6 +11,7 @@ import {
   getHighlighter,
   type Processor
 } from 'shiki-processor'
+import type { Logger } from 'vite'
 import type { ThemeOptions } from '../markdown'
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz', 10)
@@ -57,7 +58,8 @@ const errorLevelProcessor = defineProcessor({
 
 export async function highlight(
   theme: ThemeOptions = 'material-theme-palenight',
-  defaultLang: string = ''
+  defaultLang: string = '',
+  logger: Pick<Logger, 'warn'> = console
 ): Promise<(str: string, lang: string, attrs: string) => string> {
   const hasSingleTheme = typeof theme === 'string' || 'name' in theme
   const getThemeName = (themeValue: IThemeRegistration) =>
@@ -89,9 +91,9 @@ export async function highlight(
     if (lang) {
       const langLoaded = highlighter.getLoadedLanguages().includes(lang as any)
       if (!langLoaded && lang !== 'ansi') {
-        console.warn(
+        logger.warn(
           c.yellow(
-            `The language '${lang}' is not loaded, falling back to '${
+            `\nThe language '${lang}' is not loaded, falling back to '${
               defaultLang || 'txt'
             }' for syntax highlighting.`
           )
@@ -127,60 +129,28 @@ export async function highlight(
       return s
     }
 
-    if (hasSingleTheme) {
+    str = removeMustache(str)
+
+    const codeToHtml = (theme: IThemeRegistration) => {
       return cleanup(
         restoreMustache(
-          lang === 'ansi' ?
-            highlighter.ansiToHtml(removeMustache(str), {
-              lineOptions,
-              theme: getThemeName(theme)
-            })
-            :
-            highlighter.codeToHtml(removeMustache(str), {
-              lang,
-              lineOptions,
-              theme: getThemeName(theme)
-            })
+          lang === 'ansi'
+            ? highlighter.ansiToHtml(str, {
+                lineOptions,
+                theme: getThemeName(theme)
+              })
+            : highlighter.codeToHtml(str, {
+                lang,
+                lineOptions,
+                theme: getThemeName(theme)
+              })
         )
       )
     }
 
-    const dark = addClass(
-      cleanup(
-        lang === 'ansi' ?
-          highlighter.ansiToHtml(str, {
-            lineOptions,
-            theme: getThemeName(theme.dark)
-          })
-          :
-          highlighter.codeToHtml(str, {
-            lang,
-            lineOptions,
-            theme: getThemeName(theme.dark)
-          })
-      ),
-      'vp-code-dark',
-      'pre'
-    )
-
-    const light = addClass(
-      cleanup(
-        lang === 'ansi' ?
-          highlighter.ansiToHtml(str, {
-            lineOptions,
-            theme: getThemeName(theme.light)
-          })
-          :
-          highlighter.codeToHtml(str, {
-            lang,
-            lineOptions,
-            theme: getThemeName(theme.light)
-          })
-      ),
-      'vp-code-light',
-      'pre'
-    )
-
+    if (hasSingleTheme) return codeToHtml(theme)
+    const dark = addClass(codeToHtml(theme.dark), 'vp-code-dark', 'pre')
+    const light = addClass(codeToHtml(theme.light), 'vp-code-light', 'pre')
     return dark + light
   }
 }

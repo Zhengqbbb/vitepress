@@ -33,7 +33,21 @@ const buttonText = computed(
     'Search'
 )
 
-onMounted(async () => {
+const preconnect = () => {
+  const id = 'VPAlgoliaPreconnect'
+
+  const rIC = window.requestIdleCallback || setTimeout
+  rIC(() => {
+    const preconnect = document.createElement('link')
+    preconnect.id = id
+    preconnect.rel = 'preconnect'
+    preconnect.href = `https://${theme.value.algolia!.appId}-dsn.algolia.net`
+    preconnect.crossOrigin = ''
+    document.head.appendChild(preconnect)
+  })
+}
+
+onMounted(async() => {
   if (!theme.value.algolia) {
     return
   }
@@ -41,6 +55,8 @@ onMounted(async () => {
     //@ts-ignore
     await import ('../composables/getAllEvent.js')
   }
+
+  preconnect()
 
   // meta key detect (same logic as in @docsearch/js)
   metaKey.value = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
@@ -93,22 +109,6 @@ function poll() {
     }
   }, 16)
 }
-
-onMounted(() => {
-  const id = 'VPAlgoliaPreconnect'
-
-  const rIC = window.requestIdleCallback || setTimeout
-  rIC(() => {
-    if (!theme.value.algolia || document.head.querySelector(`#${id}`)) return
-
-    const preconnect = document.createElement('link')
-    preconnect.id = id
-    preconnect.rel = 'preconnect'
-    preconnect.href = `https://${theme.value.algolia.appId}-dsn.algolia.net`
-    preconnect.crossOrigin = ''
-    document.head.appendChild(preconnect)
-  })
-})
 </script>
 
 <template>
