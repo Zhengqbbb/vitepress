@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-import { generateSitemap, rebuildPWA } from '../build'
+import {  rebuildPWA } from '../build'
 import { baiduVerify, github, googleVerify, keywords, name, ogTitle } from '../meta'
 import { ImagePlugin, useCodeGroup, useCodeGroupItem } from '../theme/components/markdown'
 
@@ -21,7 +21,6 @@ export const shareConfig = defineConfig({
   cleanUrls: true,
   appearance: 'dark',
   buildEnd: async (siteConfig) => {
-    await generateSitemap(siteConfig)
     await rebuildPWA()
   },
 

@@ -7,7 +7,7 @@ import VPIconArrowRight from './icons/VPIconArrowRight.vue'
 defineProps<{
   icon?: DefaultTheme.FeatureIcon
   title: string
-  details: string
+  details?: string
   link?: string
   linkText?: string
 }>()
@@ -23,9 +23,9 @@ defineProps<{
         :height="icon.height"
         :width="icon.width"
       />
-      <div v-else-if="icon" class="icon">{{ icon }}</div>
+      <div v-else-if="icon" class="icon" v-html="icon"></div>
       <h2 class="title" v-html="title"></h2>
-      <p class="details" v-html="details"></p>
+      <p v-if="details" class="details" v-html="details"></p>
 
       <div v-if="linkText" class="link-text">
         <p class="link-text-value">
@@ -59,7 +59,8 @@ defineProps<{
 }
 
 .VPFeature:deep(.VPImage) {
-  width: fit-content;
+  width: 48px;
+  height: 48px;
   margin-bottom: 20px;
 }
 

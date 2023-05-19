@@ -15,7 +15,7 @@ import MarkdownIt from 'markdown-it'
 import anchorPlugin from 'markdown-it-anchor'
 import attrsPlugin from 'markdown-it-attrs'
 import emojiPlugin from 'markdown-it-emoji'
-import type { IThemeRegistration } from 'shiki'
+import type { ILanguageRegistration, IThemeRegistration } from 'shiki'
 import type { Logger } from 'vite'
 import { containerPlugin } from './plugins/containers'
 import { highlight } from './plugins/highlight'
@@ -44,9 +44,10 @@ export interface MarkdownOptions extends MarkdownIt.Options {
   }
   defaultHighlightLang?: string
   frontmatter?: FrontmatterPluginOptions
-  headers?: HeadersPluginOptions
+  headers?: HeadersPluginOptions | boolean
   sfc?: SfcPluginOptions
   theme?: ThemeOptions
+  languages?: ILanguageRegistration[]
   toc?: TocPluginOptions
   externalLinks?: Record<string, string>
 }
@@ -59,21 +60,31 @@ export const createMarkdownRenderer = async (
   base = '/',
   logger: Pick<Logger, 'warn'> = console
 ): Promise<MarkdownRenderer> => {
+  const theme = options.theme ?? 'material-theme-palenight'
+  const hasSingleTheme = typeof theme === 'string' || 'name' in theme
+
   const md = MarkdownIt({
     html: true,
     linkify: true,
     highlight:
       options.highlight ||
-      (await highlight(options.theme, options.defaultHighlightLang, logger)),
+      (await highlight(
+        theme,
+        options.languages,
+        options.defaultHighlightLang,
+        logger
+      )),
     ...options
   }) as MarkdownRenderer
+
+  md.linkify.set({ fuzzyLink: false })
 
   // custom plugins
   md.use(componentPlugin)
     .use(highlightLinePlugin)
-    .use(preWrapperPlugin)
+    .use(preWrapperPlugin, { hasSingleTheme })
     .use(snippetPlugin, srcDir)
-    .use(containerPlugin)
+    .use(containerPlugin, { hasSingleTheme })
     .use(imagePlugin)
     .use(
       linkPlugin,
@@ -91,18 +102,38 @@ export const createMarkdownRenderer = async (
   // mdit-vue plugins
   md.use(anchorPlugin, {
     slugify,
-    permalink: anchorPlugin.permalink.ariaHidden({}),
+    permalink: anchorPlugin.permalink.linkInsideHeader({
+      symbol: '&ZeroWidthSpace;',
+      renderAttrs: (slug, state) => {
+        // Find `heading_open` with the id identical to slug
+        const idx = state.tokens.findIndex((token) => {
+          const attrs = token.attrs
+          const id = attrs?.find((attr) => attr[0] === 'id')
+          return id && slug === id[1]
+        })
+        // Get the actual heading content
+        const title = state.tokens[idx + 1].content
+        return {
+          'aria-label': `Permalink to "${title}"`
+        }
+      }
+    }),
     ...options.anchor
-  } as anchorPlugin.AnchorOptions)
-    .use(frontmatterPlugin, {
-      ...options.frontmatter
-    } as FrontmatterPluginOptions)
-    .use(headersPlugin, {
-      ...options.headers
+  } as anchorPlugin.AnchorOptions).use(frontmatterPlugin, {
+    ...options.frontmatter
+  } as FrontmatterPluginOptions)
+
+  if (options.headers) {
+    md.use(headersPlugin, {
+      level: [2, 3, 4, 5, 6],
+      slugify,
+      ...(typeof options.headers === 'boolean' ? undefined : options.headers)
     } as HeadersPluginOptions)
-    .use(sfcPlugin, {
-      ...options.sfc
-    } as SfcPluginOptions)
+  }
+
+  md.use(sfcPlugin, {
+    ...options.sfc
+  } as SfcPluginOptions)
     .use(titlePlugin)
     .use(tocPlugin, {
       ...options.toc
